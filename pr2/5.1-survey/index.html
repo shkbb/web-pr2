@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5.1 — Комплексна функціональна анкета</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #22223a;
+      --accent: #7c5cfc;
+      --accent-glow: rgba(124,92,252,.35);
+      --green: #34d399;
+      --red: #f87171;
+      --text: #e2e2f0;
+      --text-dim: #9090b0;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--text-dim);
+      margin-bottom: 36px;
+      font-size: .95rem;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 960px;
+      width: 100%;
+    }
+
+    @media (max-width: 700px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: box-shadow .3s;
+    }
+    .card:hover {
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card h2 .icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: grid; place-items: center;
+      font-size: 1rem;
+    }
+    .icon-survey { background: linear-gradient(135deg, #7c5cfc, #a78bfa); }
+    .icon-error  { background: linear-gradient(135deg, #f87171, #fb923c); }
+
+    .card p {
+      color: var(--text-dim);
+      font-size: .88rem;
+      line-height: 1.55;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-family: inherit;
+      font-size: .92rem;
+      font-weight: 600;
+      transition: transform .15s, box-shadow .25s;
+    }
+    button:active { transform: scale(.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 30px var(--accent-glow); }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f87171, #fb923c);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(248,113,113,.3);
+    }
+
+    .console {
+      grid-column: 1 / -1;
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+    }
+
+    .console h2 {
+      font-size: 1rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #log {
+      background: #12121f;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: .82rem;
+      line-height: 1.7;
+      max-height: 320px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      color: var(--green);
+    }
+
+    #log .error { color: var(--red); }
+    #log .info  { color: var(--text-dim); }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text-dim);
+      padding: 6px 14px;
+      font-size: .78rem;
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>5.1 Комплексна функціональна анкета</h1>
+  <p class="subtitle">Інтеграція prompt, alert, Number(), перевірка повноліття та демо помилок</p>
+
+  <div class="container">
+
+    <div class="card">
+      <h2><span class="icon icon-survey">📋</span> Анкета</h2>
+      <p>Запускає <code>createSurvey()</code> — запитує ім'я, вік, місто через <code>prompt()</code>, перевіряє повноліття та виводить результат через <code>displaySurvey()</code>.</p>
+      <button class="btn-primary" id="btnSurvey">🚀 Запустити анкету</button>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon icon-error">⚠️</span> Демо помилок</h2>
+      <p>Демонструє поширені помилки: звернення до <code>let</code>/<code>const</code> до оголошення, повторне оголошення <code>const</code> та присвоєння <code>const</code>.</p>
+      <button class="btn-danger" id="btnErrors">💥 Показати помилки</button>
+    </div>
+
+    <div class="console">
+      <h2>
+        🖥️ Консоль
+        <button class="clear-btn" id="btnClear">Очистити</button>
+      </h2>
+      <div id="log"><span class="info">// Натисніть кнопку вище, щоб почати…</span></div>
+    </div>
+  </div>
+
+<script>
+const logEl = document.getElementById('log');
+
+function log(msg, type = '') {
+  const span = document.createElement('span');
+  if (type) span.className = type;
+  span.textContent = msg + '\n';
+  logEl.appendChild(span);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+document.getElementById('btnClear').addEventListener('click', () => {
+  logEl.innerHTML = '<span class="info">// Консоль очищена</span>\n';
+});
+
+function createSurvey() {
+  const name = prompt('Введіть ваше ім\'я:');
+  if (name === null) { log('⛔ Користувач скасував введення.', 'error'); return null; }
+
+  const ageInput = prompt('Введіть ваш вік:');
+  if (ageInput === null) { log('⛔ Користувач скасував введення.', 'error'); return null; }
+
+  const city = prompt('Введіть ваше місто:');
+  if (city === null) { log('⛔ Користувач скасував введення.', 'error'); return null; }
+
+  const age = Number(ageInput);
+  log(`ℹ️  Number("${ageInput}") → ${age}`, 'info');
+
+  if (Number.isNaN(age)) {
+    log('⚠️  Введене значення віку не є числом!', 'error');
+  }
+
+  const isAdult = age >= 18;
+
+  return { name, age, city, isAdult };
+}
+
+function displaySurvey(surveyData) {
+  if (!surveyData) return;
+
+  const { name, age, city, isAdult } = surveyData;
+
+  const summary = `👤 Ім'я: ${name}
+🎂 Вік: ${age}
+🏙️ Місто: ${city}
+✅ Повнолітній: ${isAdult ? 'Так' : 'Ні'}`;
+
+  log('───── Результати анкети ─────');
+  log(summary);
+  log('─────────────────────────────');
+
+  alert(`Результати анкети:\n\n${summary}`);
+}
+
+document.getElementById('btnSurvey').addEventListener('click', () => {
+  log('\n🟣 Запуск createSurvey()…', 'info');
+  const data = createSurvey();
+  displaySurvey(data);
+});
+
+document.getElementById('btnErrors').addEventListener('click', () => {
+  log('\n🔴 Демонстрація помилок оголошення змінних:', 'info');
+
+  try {
+    log('\n1️⃣  Спроба: console.log(x) перед let x = 5;');
+    (function() {
+      console.log(x);
+      let x = 5;
+    })();
+  } catch (e) {
+    log(`   ❌ ${e.name}: ${e.message}`, 'error');
+  }
+
+  try {
+    log('\n2️⃣  Спроба: const a = 1; const a = 2;');
+    eval('const a = 1; const a = 2;');
+  } catch (e) {
+    log(`   ❌ ${e.name}: ${e.message}`, 'error');
+  }
+
+  try {
+    log('\n3️⃣  Спроба: const b = 10; b = 20;');
+    const b = 10;
+    eval('b = 20');
+  } catch (e) {
+    log(`   ❌ ${e.name}: ${e.message}`, 'error');
+  }
+
+  try {
+    log('\n4️⃣  let counter = 0; counter = 42;');
+    let counter = 0;
+    counter = 42;
+    log(`   ✅ counter = ${counter} — let дозволяє перезапис`);
+  } catch (e) {
+    log(`   ❌ ${e.name}: ${e.message}`, 'error');
+  }
+
+  log('\n✔️  Демонстрація завершена.');
+});
+</script>
+
+</body>
+</html>
